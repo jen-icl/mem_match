@@ -1,0 +1,65 @@
+body {
+    margin: 0;
+}
+
+header {
+    height: 15vh;
+    background-color: hotpink;
+
+}
+
+.title {
+    text-align: center;
+}
+
+.title h1 {
+    margin: 0;
+    padding: 2%;
+}
+
+.links {
+    text-align: right;
+    padding-right: 2%;
+}
+
+.main {
+    height: 85vh;
+    font-size: 0;
+}
+.stats-container, #game-area {
+    display: inline-block;
+    font-size: 1rem;
+    vertical-align: top; /*or text-top, because there's text in sibling div*/
+}
+
+.stats-container {
+    height: 100%;
+    width: 20%;
+    text-align: center;
+    background-color: cyan;
+}
+
+#game-area {
+    height: 100%;
+    width: 80%;
+}
+
+.card-container {
+    height: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    width: 16%;
+    height: 30%;
+    background-color: lightsalmon;
+    position: relative;
+}
+
+.front img, .back img {
+    height: 150px;
+    position: absolute;
+}
