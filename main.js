@@ -28,7 +28,6 @@ var game_images = [
 
 function random_array(array){
     var current_index = array.length;
-
     while(0 !== current_index){
         var random_index = Math.floor(Math.random() * current_index);
         current_index--;
@@ -42,15 +41,14 @@ function random_array(array){
 function create_card(){
     console.log('create card');
     var game_area = $("#game-area");
-    var consecutive_index = [1, 10];
-    for(var card_pair = 0; card_pair < 2; card_pair++) {
+    for(var card_pair = 0; card_pair < 18; card_pair) {
         random_array(game_images);
-        for (var index = 0; index < game_images.length; index++) {
-            var create_card_div = $("<div>").addClass('card no' + (index + consecutive_index[card_pair]));
+        for (var index = card_pair; index < card_pair + game_images.length; index++) {
+            var create_card_div = $("<div>").addClass('card no' + index);
             var create_front_div = $("<div>").addClass('front');
             var create_front_img = $("<img>").attr({
-                'src': game_images[index][0],
-                'alt': game_images[index][1]
+                'src': game_images[index - card_pair][0],
+                'alt': game_images[index - card_pair][1]
             });
             var create_back_div = $("<div>").addClass('back');
             var create_back_img = $("<img>").attr({
@@ -62,6 +60,7 @@ function create_card(){
             create_card_div.append(create_front_div, create_back_div);
             game_area.append(create_card_div);
         }
+        card_pair = index;
     }
 }
 
@@ -73,20 +72,24 @@ function card_clicked(){
             first_card_clicked = $(this); //true: assign first_card_clicked = html DOM Element that was clicked
             first_card_details.class = $(this).attr('class');
             first_card_details.imgsource = $(".front img", this).attr('src');
-            //$(".card", this).off('click');
+            disable_click(first_card_clicked); //###remove click event from click
+
             console.log(first_card_details);
             console.log(first_card_clicked);
         } else {
             second_card_clicked = $(this); //false: assign second_card_clicked = html DOM Element that was clicked
             second_card_details.class = $(this).attr('class');
             second_card_details.imgsource = $(".front img", this).attr('src');
+            disable_click('.card');
             wait_timeout = true;
             console.log(second_card_details);
             console.log(wait_timeout);
             if (first_card_details.class !== second_card_details.class && first_card_details.imgsource === second_card_details.imgsource) { //check if first_card_clicked === second_card_clicked
                 console.log('correct match');
-                //$(".card", this).off('click'); //###remove click event from success matches
                 match_counter++; //true: increment match_counter by 1
+                first_card_clicked.addClass('matched');
+                second_card_clicked.addClass('matched');
+                reactivate_click('.card');
                 first_card_clicked = null; //reset both variables back to null
                 second_card_clicked = null;
                 first_card_details = {};
@@ -94,10 +97,11 @@ function card_clicked(){
                 wait_timeout = false;
                 if (match_counter === total_possible_matches) { //check if match_counter === total_possible_matches
                     alert('You have won!')// true: Display a message to user they have won
-                } //false: click handler function is complete, return
+                }
+                return; //false: click handler function is complete, return
             } else {
                 console.log('not matched');
-                setTimeout(reset_incorrect_match, 500); //false: wait 2s, then perform a function
+                setTimeout(reset_incorrect_match, 1500); //false: wait 2s, then perform a function
             }
         }
     }
@@ -108,20 +112,32 @@ function card_clicked(){
 //v pointer-event: none to avoid card flipping during reset delay doesn't work
 
 //v DOM creation - create cards
-//shuffle cards - randomize  array - https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+//v shuffle cards - randomize  array
 
 //add css to alert dialog
 //.slideDown() jQuery for completion message
 //remove all console.log() after checks
 
+
+//trace the shuffle cards loop
+//may not need cards with numbered class name, trace the dom creation loop
+
 function reset_incorrect_match(){
     console.log('reset cards');
     $(".back", first_card_clicked).show();
     $(".back", second_card_clicked).show(); //show card back on both elements that are flipped over
-    //$(first_card_clicked).on('click', card_clicked);
+    reactivate_click('.card');
     first_card_clicked = null; //reset both card_clicked variables back to null
     second_card_clicked = null;
     first_card_details = {};
     second_card_details = {};
     wait_timeout = false;
+}
+
+function disable_click(card){
+    $(card).off('click');
+}
+
+function reactivate_click(card){
+    $(card).not('.matched').on('click', card_clicked);
 }

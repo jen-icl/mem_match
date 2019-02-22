@@ -9,13 +9,13 @@ header {
 
 }
 
-.title {
-    text-align: center;
-}
-
-.title h1 {
-    margin: 0;
-    padding: 3%;
+header div {
+    display: inline-block;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: grey;
 }
 
 .main {
@@ -35,6 +35,16 @@ header {
     background-color: cyan;
 }
 
+.stats-container div {
+    position: relative;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.links {
+
+}
 
 #game-area {
     height: 100%;
