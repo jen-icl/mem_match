@@ -12,7 +12,14 @@ var first_card_details = {}; //###return value of class and imgsource for compar
 var second_card_details = {};
 var wait_timeout = false;
 var total_possible_matches = 9; //full game = 9
-var match_counter = 0;
+var matches = 0;
+var attempts = 0;
+var accuracy = 0;
+var games_played = 0; //When the page is loaded a new
+// global variable should be defined called games_played.
+// When the game is reset by clicking the reset button
+// the games_played should be incremented by 1.
+
 
 var game_images = [
     ['images/mercury.png', 'mercury'],
@@ -29,8 +36,8 @@ var game_images = [
 function random_array(array){
     var current_index = array.length;
     while(0 !== current_index){
-        var random_index = Math.floor(Math.random() * current_index);
         current_index--;
+        var random_index = Math.floor(Math.random() * current_index);
         var temp = array[current_index];
         array[current_index] = array[random_index];
         array[random_index] = temp;
@@ -72,7 +79,8 @@ function card_clicked(){
             first_card_clicked = $(this); //true: assign first_card_clicked = html DOM Element that was clicked
             first_card_details.class = $(this).attr('class');
             first_card_details.imgsource = $(".front img", this).attr('src');
-            disable_click(first_card_clicked); //###remove click event from click
+            $(first_card_clicked).off('click');
+            //disable_click(first_card_clicked); //###remove click event from click
 
             console.log(first_card_details);
             console.log(first_card_clicked);
@@ -81,12 +89,13 @@ function card_clicked(){
             second_card_details.class = $(this).attr('class');
             second_card_details.imgsource = $(".front img", this).attr('src');
             disable_click('.card');
+            attempts += 1;
             wait_timeout = true;
             console.log(second_card_details);
             console.log(wait_timeout);
             if (first_card_details.class !== second_card_details.class && first_card_details.imgsource === second_card_details.imgsource) { //check if first_card_clicked === second_card_clicked
                 console.log('correct match');
-                match_counter++; //true: increment match_counter by 1
+                matches += 1; //true: increment match_counter by 1
                 first_card_clicked.addClass('matched');
                 second_card_clicked.addClass('matched');
                 reactivate_click('.card');
@@ -95,7 +104,7 @@ function card_clicked(){
                 first_card_details = {};
                 second_card_details = {};
                 wait_timeout = false;
-                if (match_counter === total_possible_matches) { //check if match_counter === total_possible_matches
+                if (matches === total_possible_matches) { //check if match_counter === total_possible_matches
                     alert('You have won!')// true: Display a message to user they have won
                 }
                 return; //false: click handler function is complete, return
@@ -105,6 +114,7 @@ function card_clicked(){
             }
         }
     }
+    display_stats();
 }
 //v put the check class and imgsource in an object
 //v double-clicking first card will unflip the card - think of how to inactivate the first card until second card is clicked
@@ -121,6 +131,7 @@ function card_clicked(){
 
 //trace the shuffle cards loop
 //may not need cards with numbered class name, trace the dom creation loop
+//remove wait timeout
 
 function reset_incorrect_match(){
     console.log('reset cards');
@@ -140,4 +151,27 @@ function disable_click(card){
 
 function reactivate_click(card){
     $(card).not('.matched').on('click', card_clicked);
+}
+
+function display_stats(){
+    $(".games-played .value").text(games_played);
+    $(".attempts .value").text(attempts);
+    accuracy = matches / attempts * 100;
+    $(".accuracy .value").text(accuracy + '%');
+}
+
+function reset_stats(){
+    accuracy = 0;
+    matches = 0;
+    attempts = 0;
+    display_stats();
+}
+
+$(".reset").on('click', reset_button);
+function reset_button(){
+    games_played += 1;
+    reset_stats();
+    display_stats();
+    $("#game-area").empty();
+    create_card();
 }
