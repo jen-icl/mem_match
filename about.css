@@ -1,0 +1,41 @@
+aside, .content {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+}
+
+aside {
+    width: 20%;
+    padding-top: 5%;
+    font-size: 1rem;
+}
+
+.profile-pic {
+    width: 80%;
+    margin: auto;
+}
+
+.profile-pic img {
+    width: 80%;
+}
+
+.content {
+    font-size: 1rem;
+    width: 80%;
+    padding: 5%;
+    box-sizing: border-box;
+    background-color: rgba(60, 60, 60, 0.5);
+    filter: drop-shadow(2px 2px 6px #f9d800);
+}
+
+.description {
+    font-size: 1.25em;
+}
+
+.skills > ul {
+    padding: 0;
+}
+
+.skills > ul li {
+    list-style-type: none;
+}

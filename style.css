@@ -1,21 +1,71 @@
+@import url('https://fonts.googleapis.com/css?family=Orbitron:900|Supermercado+One');
+@import url('https://fonts.googleapis.com/css?family=Bitter:700');
+
 body {
     margin: 0;
-    background-color: black;
+    background-image: url("images/bg.jpg");
+    background-size: cover;
+
 }
 
 header {
     height: 15vh;
-    background-color: hotpink;
-
+    width: 100vw;
+    font-size: 0;
 }
 
-header div {
+.logo, .title {
     display: inline-block;
+    height: 100%;
+    position: relative;
+}
+
+.logo {
+    width: 20%;
+}
+
+.logo img {
+    height: 80%;
     position: relative;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: grey;
+}
+
+.title {
+    width: 80%;
+    text-align: center;
+    font-size: 2rem;
+    font-family: 'Orbitron', sans-serif;
+    vertical-align: top;
+    filter: drop-shadow(4px 4px 6px #f9d800);
+}
+
+.title h1 {
+    width: 100%;
+    margin: 0;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.complete {
+    position: relative;
+}
+
+.alert {
+    width: 40%;
+    position: absolute;
+    right: -10%;
+    transform: translateX(-50%);
+    padding: 3%;
+    border: 5px solid black;
+    background-color: rgba(60, 60, 60, 0.5);
+    filter: drop-shadow(2px 2px 6px #f9d800);
+    font-size: 1.25em;
+    font-family: 'Bitter', serif;
+    text-align: center;
+    z-index: 1;
 }
 
 .main {
@@ -32,23 +82,39 @@ header div {
     height: 100%;
     width: 20%;
     text-align: center;
-    background-color: cyan;
+    padding-top: 5%;
+    box-sizing: border-box;
 }
 
 .stats-container div {
     position: relative;
-    top: 25%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    font-size: 1.5em;
+    font-family: 'Supermercado One', cursive;
+    border-radius: 20%;
+    border: 5px solid black;
+    margin: 5%;
+    background-color: rgba(60, 60, 60, 0.1);
+    filter: drop-shadow(2px 2px 6px #f9d800);
 }
 
-.links {
-
+button {
+    margin-top: 5%;
+    font-size: 1em;
+    font-family: 'Bitter', serif;
+    background: linear-gradient(
+            rgb(60, 60, 60),
+            rgb(180, 180, 180),
+            rgb(60, 60, 60));
+    border-radius: 20%;
+    border: 1px solid rgb(60, 60, 60);
+    filter: drop-shadow(2px 2px 6px #f9d800);
 }
 
 #game-area {
     height: 100%;
     width: 80%;
+    padding: 5%;
+    box-sizing: border-box;
     display: inline-flex;
     flex-flow: row wrap;
     justify-content: space-evenly;
@@ -57,12 +123,22 @@ header div {
 
 .card {
     width: 15%;
-    height: 30%;
-    background-color: lightsalmon;
+    height: 15%;
     position: relative;
 }
 
 .front img, .back img {
     width: 100%;
     position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    filter: drop-shadow(2px 2px 4px #c9b21a);
+}
+
+.display-none {
+    display: none;
+}
+
+.scale-smaller {
+    transform: scale()
 }
