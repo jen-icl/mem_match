@@ -1,18 +1,21 @@
 $(document).ready(initializeApp);
 
 function initializeApp(){
-    console.log('ready');
+    $(".alert").addClass('display-none');
     create_card();
     $(".card").on('click', card_clicked);
+    display_stats();
+    $(".reset").on('click', reset_button);
 }
 
 var first_card_clicked = null;
 var second_card_clicked = null;
-var first_card_details = {}; //###return value of class and imgsource for comparison
-var second_card_details = {};
-var wait_timeout = false;
-var total_possible_matches = 9; //full game = 9
-var match_counter = 0;
+var total_possible_matches = 9;
+var matches = 0;
+var attempts = 0;
+var accuracy = 0;
+var games_played = 0;
+
 
 var game_images = [
     ['images/mercury.png', 'mercury'],
@@ -24,35 +27,32 @@ var game_images = [
     ['images/uranus.png', 'uranus'],
     ['images/neptune.png', 'neptune'],
     ['images/pluto-sphere.png', 'pluto-sphere']
-]; //image source list
+];
 
 function random_array(array){
-    var current_index = array.length;
-    while(0 !== current_index){
-        var random_index = Math.floor(Math.random() * current_index);
-        current_index--;
-        var temp = array[current_index];
-        array[current_index] = array[random_index];
-        array[random_index] = temp;
+    for(var index = 0; index < array.length; index++) {
+        var random_index = Math.floor(Math.random() * game_images.length);
+        var temp_item = array[index];
+        array[index] = array[random_index];
+        array[random_index] = temp_item;
     }
     return array;
 }
 
 function create_card(){
-    console.log('create card');
     var game_area = $("#game-area");
-    for(var card_pair = 0; card_pair < 18; card_pair) {
+    for(var card_pair = 0; card_pair < 2; card_pair++) {
         random_array(game_images);
-        for (var index = card_pair; index < card_pair + game_images.length; index++) {
-            var create_card_div = $("<div>").addClass('card no' + index);
+        for (var index = 0; index < game_images.length; index++) {
+            var create_card_div = $("<div>").addClass('card');
             var create_front_div = $("<div>").addClass('front');
             var create_front_img = $("<img>").attr({
-                'src': game_images[index - card_pair][0],
-                'alt': game_images[index - card_pair][1]
+                'src': game_images[index][0],
+                'alt': game_images[index][1]
             });
             var create_back_div = $("<div>").addClass('back');
             var create_back_img = $("<img>").attr({
-                'src': 'images/galaxy.png',
+                'src': 'images/silver-back.png',
                 'alt': 'card back'
             });
             create_front_div.append(create_front_img);
@@ -60,78 +60,43 @@ function create_card(){
             create_card_div.append(create_front_div, create_back_div);
             game_area.append(create_card_div);
         }
-        card_pair = index;
     }
 }
 
 function card_clicked(){
-    console.log('enter card_clicked');
-    if(!wait_timeout) {
-        $(".back", this).hide(); //show card face or $(this).find(".back").hide();
-        if (first_card_clicked === null) {  //check if first_card_clicked === null
-            first_card_clicked = $(this); //true: assign first_card_clicked = html DOM Element that was clicked
-            first_card_details.class = $(this).attr('class');
-            first_card_details.imgsource = $(".front img", this).attr('src');
-            disable_click(first_card_clicked); //###remove click event from click
-
-            console.log(first_card_details);
-            console.log(first_card_clicked);
-        } else {
-            second_card_clicked = $(this); //false: assign second_card_clicked = html DOM Element that was clicked
-            second_card_details.class = $(this).attr('class');
-            second_card_details.imgsource = $(".front img", this).attr('src');
-            disable_click('.card');
-            wait_timeout = true;
-            console.log(second_card_details);
-            console.log(wait_timeout);
-            if (first_card_details.class !== second_card_details.class && first_card_details.imgsource === second_card_details.imgsource) { //check if first_card_clicked === second_card_clicked
-                console.log('correct match');
-                match_counter++; //true: increment match_counter by 1
-                first_card_clicked.addClass('matched');
-                second_card_clicked.addClass('matched');
-                reactivate_click('.card');
-                first_card_clicked = null; //reset both variables back to null
-                second_card_clicked = null;
-                first_card_details = {};
-                second_card_details = {};
-                wait_timeout = false;
-                if (match_counter === total_possible_matches) { //check if match_counter === total_possible_matches
-                    alert('You have won!')// true: Display a message to user they have won
-                }
-                return; //false: click handler function is complete, return
-            } else {
-                console.log('not matched');
-                setTimeout(reset_incorrect_match, 1500); //false: wait 2s, then perform a function
+    $(".back", this).addClass('display-none'); //or $(this).find(".back").hide();
+    if (first_card_clicked === null) {
+        first_card_clicked = this;
+        disable_click(first_card_clicked);
+    } else {
+        second_card_clicked = this;
+        var first_card_image = $(".front img", first_card_clicked).attr('src');
+        var second_card_image = $(".front img", second_card_clicked).attr('src');
+        disable_click('.card');
+        attempts++;
+        if (first_card_image === second_card_image) {
+            matches++;
+            $(first_card_clicked).addClass('matched');
+            $(second_card_clicked).addClass('matched');
+            reactivate_click('.card');
+            first_card_clicked = null;
+            second_card_clicked = null;
+            if (matches === total_possible_matches) {
+                $(".alert").removeClass('display-none');
             }
+        } else {
+            setTimeout(reset_incorrect_match, 2000);
         }
     }
+    display_stats();
 }
-//v put the check class and imgsource in an object
-//v double-clicking first card will unflip the card - think of how to inactivate the first card until second card is clicked
-//v add a global flag (check_card_flipped = true)
-//v pointer-event: none to avoid card flipping during reset delay doesn't work
-
-//v DOM creation - create cards
-//v shuffle cards - randomize  array
-
-//add css to alert dialog
-//.slideDown() jQuery for completion message
-//remove all console.log() after checks
-
-
-//trace the shuffle cards loop
-//may not need cards with numbered class name, trace the dom creation loop
 
 function reset_incorrect_match(){
-    console.log('reset cards');
-    $(".back", first_card_clicked).show();
-    $(".back", second_card_clicked).show(); //show card back on both elements that are flipped over
+    $(".back", first_card_clicked).removeClass('display-none');
+    $(".back", second_card_clicked).removeClass('display-none');
     reactivate_click('.card');
-    first_card_clicked = null; //reset both card_clicked variables back to null
+    first_card_clicked = null;
     second_card_clicked = null;
-    first_card_details = {};
-    second_card_details = {};
-    wait_timeout = false;
 }
 
 function disable_click(card){
@@ -140,4 +105,36 @@ function disable_click(card){
 
 function reactivate_click(card){
     $(card).not('.matched').on('click', card_clicked);
+}
+
+function calc_accuracy(){
+    accuracy = matches / attempts * 100;
+    accuracy = accuracy.toFixed();
+    if(isNaN(accuracy)){
+        return 0;
+    }
+    return accuracy;
+}
+
+function display_stats(){
+    $(".games-played .value").text(games_played);
+    $(".attempts .value").text(attempts);
+    accuracy = calc_accuracy();
+    $(".accuracy .value").text(accuracy + '%');
+}
+
+function reset_stats(){
+    accuracy = 0;
+    matches = 0;
+    attempts = 0;
+    display_stats();
+}
+
+function reset_button(){
+    games_played++;
+    reset_stats();
+    display_stats();
+    $(".alert").addClass('display-none');
+    $("#game-area").empty();
+    create_card();
 }
