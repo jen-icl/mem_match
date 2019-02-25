@@ -113,7 +113,7 @@ button {
 #game-area {
     height: 100%;
     width: 80%;
-    padding: 5%;
+    padding: 5% 0;
     box-sizing: border-box;
     display: inline-flex;
     flex-flow: row wrap;
@@ -137,8 +137,4 @@ button {
 
 .display-none {
     display: none;
-}
-
-.scale-smaller {
-    transform: scale()
 }

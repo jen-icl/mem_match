@@ -91,8 +91,6 @@ function card_clicked(){
     display_stats();
 }
 
-//scale cards smaller if wrong guess and proportionally larger if correct
-
 function reset_incorrect_match(){
     $(".back", first_card_clicked).removeClass('display-none');
     $(".back", second_card_clicked).removeClass('display-none');
