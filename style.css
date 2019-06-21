@@ -5,13 +5,13 @@ body {
     margin: 0;
     background-image: url("images/bg.jpg");
     background-size: cover;
-
 }
 
 header {
     height: 15vh;
-    width: 100vw;
     font-size: 0;
+    padding-top: 15px;
+    box-sizing: border-box;
 }
 
 .logo, .title {
@@ -71,6 +71,8 @@ header {
 .main {
     height: 85vh;
     font-size: 0;
+    padding-top: 15px;
+    box-sizing: border-box;
 }
 .stats-container, #game-area {
     display: inline-block;
@@ -82,17 +84,17 @@ header {
     height: 100%;
     width: 20%;
     text-align: center;
-    padding-top: 5%;
+    padding-top: 15px;
     box-sizing: border-box;
 }
 
 .stats-container div {
-    position: relative;
     font-size: 1.5em;
     font-family: 'Supermercado One', cursive;
     border-radius: 20%;
     border: 5px solid black;
-    margin: 5%;
+    box-sizing: border-box;
+
     background-color: rgba(60, 60, 60, 0.1);
     filter: drop-shadow(2px 2px 6px #f9d800);
 }
@@ -113,7 +115,7 @@ button {
 #game-area {
     height: 100%;
     width: 80%;
-    padding: 5% 0;
+    padding: 15px;
     box-sizing: border-box;
     display: inline-flex;
     flex-flow: row wrap;
@@ -121,7 +123,7 @@ button {
     align-items: center;
 }
 
-.card {
+.cardContainer {
     width: 15%;
     height: 15%;
     position: relative;
@@ -137,4 +139,68 @@ button {
 
 .display-none {
     display: none;
+}
+
+/*-----------------about page--------------------*/
+
+aside, .content {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+}
+
+aside {
+    width: 20%;
+    padding-top: 5%;
+    font-size: 1rem;
+}
+
+.profile-pic {
+    width: 80%;
+    margin: auto;
+}
+
+.profile-pic img {
+    width: 80%;
+}
+
+.content {
+    font-size: 1rem;
+    width: 80%;
+    padding: 5%;
+    box-sizing: border-box;
+    background-color: rgba(60, 60, 60, 0.3);
+    filter: drop-shadow(2px 2px 6px #f9d800);
+}
+
+.description {
+    font-size: 1.25em;
+}
+
+.skills > ul {
+    padding: 0;
+}
+
+.skills > ul li {
+    list-style-type: none;
+}
+
+/*----------------media queries------------------*/
+
+@media (max-width: 1024px){
+    #game-area {
+        padding: 40px 15px 80px;
+    }
+}
+
+@media (max-width: 768px){
+    #game-area {
+        /*move stats to the top*/
+    }
+}
+
+@media (max-width: 576px){
+    #game-area {
+        /*move stats to the top*/
+    }
 }
